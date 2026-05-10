@@ -5,4 +5,5 @@ en un entorno amigable donde puedan aprender sin miedo a dañar los componentes.
   El puzle tambien ayudara a que se tenga mayor rapidez en la resulucion de problemas de logica, a modo que puede ser una herramienta que 
 mantenga entretenido y pero sin ser ageno a lo academico mediante un sistema de ranking donde los alumnos pueden ver quien resolvio mas puzles
 asi tambien se pueden guardar las semillas de los puzles a modo de plantearlo en clase o resolver el problema entre mas de un alumno.
+  Obs: el archivo cargado actualmente esta incompleto, solo fueron creadas las clases a ser usadas
 
