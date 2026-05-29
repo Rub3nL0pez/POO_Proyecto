@@ -11,14 +11,14 @@ package puzlecompuertaslogicas;
 public class LoginRegistro extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginRegistro.class.getName());
-
+    private java.util.ArrayList<Usuario> listaUsuarios; //para cargar los usuarios
     /**
      * Creates new form LoginRegistro
      */
     public LoginRegistro() {
         initComponents();
+        this.listaUsuarios = Memorycard.cargarTodosLosUsuarios();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,21 +28,196 @@ public class LoginRegistro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
+        btnIniciarSesion = new javax.swing.JButton();
+        btnRegistrarse = new javax.swing.JButton();
+        btnVerRanking = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Usuario");
+
+        jLabel2.setText("Contraseña");
+
+        btnIniciarSesion.setText("Iniciar Sesion");
+        btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
+
+        btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addActionListener(this::btnRegistrarseActionPerformed);
+
+        btnVerRanking.setText("Ranking");
+        btnVerRanking.addActionListener(this::btnVerRankingActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(234, 234, 234)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtUsuario)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(btnIniciarSesion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRegistrarse)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnVerRanking)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnRegistrarse)
+                        .addComponent(btnVerRanking))
+                    .addComponent(btnIniciarSesion))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        // TODO add your handling code here:
+        // 1. Capturamos datos
+    String nombreInput = txtUsuario.getText().trim();
+    String passwordInput = new String(txtPassword.getPassword()).trim();
+
+    if (nombreInput.isEmpty() || passwordInput.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Ingresa tu usuario y contraseña para entrar.", "Campos Vacíos", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // 2. Buscamos el usuario
+    Usuario usuarioEncontrado = null;
+    if (this.listaUsuarios != null) {
+        for (Usuario u : listaUsuarios) {
+            if (u.getNombre().equalsIgnoreCase(nombreInput)) {
+                usuarioEncontrado = u;
+                break;
+            }
+        }
+    }
+
+    // 3. Validamos la contraseña
+    if (usuarioEncontrado == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "El usuario no existe. Regístrate primero.", "Error de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } else {
+        if (usuarioEncontrado.verificarPassword(passwordInput)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "Acceso Concedido", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            // Más adelante acá abriremos la pantalla de juego principal
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Contraseña incorrecta. Inténtalo de nuevo.", "Error de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+        
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+        // TODO add your handling code here:
+        String nombreInput = txtUsuario.getText().trim();
+        String passwordInput = new String(txtPassword.getPassword()).trim();
+        //Validacion
+        if (nombreInput.isEmpty() || passwordInput.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos para registrarte.", "Campos Vacíos", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+        }
+        //se valida si el usuario ya existe
+        boolean usuarioYaExiste = false;
+        if (this.listaUsuarios != null) {
+        for (Usuario u : listaUsuarios) {
+            if (u.getNombre().equalsIgnoreCase(nombreInput)) {
+                usuarioYaExiste = true;
+                break;
+                }
+            }
+        }
+        //se guarda o se pide que se ingrese con otro nombre
+        if (usuarioYaExiste) {
+        javax.swing.JOptionPane.showMessageDialog(this, "El nombre de usuario ya está registrado. Elige otro.", "Usuario Duplicado", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+        Usuario nuevoUsuario = new Usuario(nombreInput, passwordInput);
+        Memorycard.guardarOActualizarUsuario(nuevoUsuario);
+        this.listaUsuarios = Memorycard.cargarTodosLosUsuarios(); // Recargamos la lista
+        
+        javax.swing.JOptionPane.showMessageDialog(this, "¡Usuario registrado con éxito! Ya puedes iniciar sesión.", "Registro Exitoso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        
+        txtUsuario.setText("");
+        txtPassword.setText("");
+               }
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void btnVerRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerRankingActionPerformed
+        // TODO add your handling code here:
+        // 1. Le pedimos a la Memorycard la lista de usuarios ya ordenada de mayor a menor
+    java.util.ArrayList<Usuario> ranking = Memorycard.obtenerRankingUsuarios();
+
+    // 2. Validamos si la lista está vacía (si todavía no hay alumnos registrados)
+    if (ranking == null || ranking.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Aún no hay alumnos registrados para mostrar en el ranking.", "Ranking Vacío", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    // 3. Construimos el texto del podio de forma organizada
+    StringBuilder constructorTexto = new StringBuilder();
+    constructorTexto.append("🏆 --- PODIO DE ESTUDIANTES --- 🏆\n\n");
+    constructorTexto.append(String.format("%-5s %-20s %-10s\n", "Pos.", "Alumno", "Puntaje"));
+    constructorTexto.append("-------------------------------------------\n");
+
+    // 4. Recorremos la lista para armar las posiciones con medallas
+    for (int i = 0; i < ranking.size(); i++) {
+        Usuario u = ranking.get(i);
+        String posicionStr;
+        
+        // Asignamos medallas a los tres primeros puestos
+        switch (i) {
+            case 0:  posicionStr = "🥇 1°"; break;
+            case 1:  posicionStr = "🥈 2°"; break;
+            case 2:  posicionStr = "🥉 3°"; break;
+            default: posicionStr = "   " + (i + 1) + "°"; break;
+        }
+        
+        // Formateamos las columnas para que queden perfectamente alineadas
+        constructorTexto.append(String.format("%-5s %-20s %-10d Pts.\n", 
+                posicionStr, 
+                u.getNombre(), 
+                u.getPuntaje()));
+    }
+
+    // 5. Mostramos el ranking en un cuadro de texto con fuente alineada (Monospaced)
+    javax.swing.JTextArea areaTexto = new javax.swing.JTextArea(constructorTexto.toString());
+    areaTexto.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 13));
+    areaTexto.setEditable(false); // Bloqueamos para que el usuario no pueda editar los puntos
+
+    javax.swing.JOptionPane.showMessageDialog(this, 
+            new javax.swing.JScrollPane(areaTexto), 
+            "Ranking de Compuertas Lógicas", 
+            javax.swing.JOptionPane.PLAIN_MESSAGE);
+        
+        
+    }//GEN-LAST:event_btnVerRankingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +245,12 @@ public class LoginRegistro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JButton btnRegistrarse;
+    private javax.swing.JButton btnVerRanking;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
