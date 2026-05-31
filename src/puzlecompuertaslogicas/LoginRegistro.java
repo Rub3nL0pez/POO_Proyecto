@@ -55,30 +55,30 @@ public class LoginRegistro extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(164, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(234, 234, 234)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtUsuario)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
                         .addComponent(btnIniciarSesion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRegistrarse)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnVerRanking)))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addGap(161, 161, 161))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(156, 156, 156)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -92,7 +92,7 @@ public class LoginRegistro extends javax.swing.JFrame {
                         .addComponent(btnRegistrarse)
                         .addComponent(btnVerRanking))
                     .addComponent(btnIniciarSesion))
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addGap(89, 89, 89))
         );
 
         pack();
@@ -100,7 +100,7 @@ public class LoginRegistro extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        // 1. Capturamos datos
+      // 1. Capturamos datos
     String nombreInput = txtUsuario.getText().trim();
     String passwordInput = new String(txtPassword.getPassword()).trim();
 
@@ -120,14 +120,23 @@ public class LoginRegistro extends javax.swing.JFrame {
         }
     }
 
-    // 3. Validamos la contraseña
+    // 3. Validamos la contraseña e iniciamos el simulador
     if (usuarioEncontrado == null) {
         javax.swing.JOptionPane.showMessageDialog(this, "El usuario no existe. Regístrate primero.", "Error de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
     } else {
         if (usuarioEncontrado.verificarPassword(passwordInput)) {
             javax.swing.JOptionPane.showMessageDialog(this, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "Acceso Concedido", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             
-            // Más adelante acá abriremos la pantalla de juego principal
+            // --- ¡AQUÍ ESTÁ LA MAGIA LOGRADA! ---
+            // 1. Instanciamos el simulador pasando el usuario validado
+            VistaSimulador juego = new VistaSimulador(usuarioEncontrado);
+            
+            // 2. Hacemos visible la pantalla del simulador
+            juego.setVisible(true);
+            
+            // 3. Destruimos la ventana de Login actual para liberar memoria de la pantalla
+            this.dispose();
+            
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Contraseña incorrecta. Inténtalo de nuevo.", "Error de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
