@@ -1,0 +1,142 @@
+classDiagram
+    %% Paquete Compuertas
+    namespace Compuertas {
+        class Compuertas {
+            <<abstract>>
+            - String nombre
+            - String simbolo
+            + Compuertas(String nombre, String simbolo)
+            + setNombre(String nombre) void
+            + setSimbolo(String simbolo) void
+            + getNombre() String
+            + getSimbolo() String
+            + operar(boolean a, boolean b)* boolean
+        }
+        
+        class AND {
+            + AND()
+            + operar(boolean a, boolean b) boolean
+        }
+        
+        class OR {
+            + OR()
+            + operar(boolean a, boolean b) boolean
+        }
+        
+        class XOR {
+            + XOR()
+            + operar(boolean a, boolean b) boolean
+        }
+        
+        class NOT {
+            + NOT()
+            + operar(boolean a, boolean b) boolean
+        }
+    }
+
+    %% Paquete PuzleCompuertasLogicas
+    namespace puzlecompuertaslogicas {
+        class Usuario {
+            - String nombre
+            - String password
+            - int nivelActual
+            - int nivelMaximo
+            - int puntaje
+            - boolean[] histEntradaA
+            - boolean[] histEntradaB
+            - boolean[] histEntradaC
+            - boolean[] histEntradaD
+            - boolean[] histRespuestaEsperada
+            - boolean[] nivelYaRegistrado
+            - int[] histCompuertasOcultasVisual
+            - String[] histNombreCompuertaActual
+            - String[] histNombreCompuertaAux1
+            - String[] histNombreCompuertaAux2
+            + Usuario(String nombre, String password)
+            + avanzarNivel() void
+            + retrocederVoluntario() void
+            + retrocederFallo() void
+            + verificarPassword(String passwordUsuario) boolean
+            + sumarPuntos(int puntos) void
+            + restarPuntos(int puntos) void
+            + getNivelAlcanzado() int
+            + setNivelAlcanzado(int nivelActual) void
+        }
+
+        class Memorycard {
+            <<static>>
+            - String ARCHIVO_GUARDADO = "usuarios_db.dat"
+            + cargarTodosLosUsuarios() ArrayList~Usuario~
+            - guardarListaUsuarios(ArrayList~Usuario~ lista) void
+            + guardarOActualizarUsuario(Usuario usuarioAEditar) void
+            + obtenerRankingUsuarios() ArrayList~Usuario~
+        }
+
+        class GeneradorDeNiveles {
+            - int nivelActual
+            - int intentosRestantes
+            - int puntosPorNivel
+            - boolean entradaA
+            - boolean entradaB
+            - boolean entradaC
+            - boolean entradaD
+            - boolean respuestaEsperada
+            - Compuertas compuertaActual
+            - Compuertas compuertaAux1
+            - Compuertas compuertaAux2
+            - boolean[] histEntradaA
+            - boolean[] histEntradaB
+            - boolean[] histEntradaC
+            - boolean[] histEntradaD
+            - boolean[] histRespuestaEsperada
+            - boolean[] nivelYaRegistrado
+            - String[] histNombreCompuertaActual
+            - String[] histNombreCompuertaAux1
+            - String[] histNombreCompuertaAux2
+            + GeneradorDeNiveles()
+            + generarCircuito() void
+            + calcularResultadoInterno() void
+            + evaluarRespuestaMatematica(String rta, int compuertaOculta) boolean
+            + verificar(boolean esCorrecto) int
+            + siguienteNivel() boolean
+            + anteriorNivel() boolean
+            + restaurarCompuertasDesdeHistorial(String[] nC, String[] nA1, String[] nA2) void
+        }
+
+        class VistaSimulador {
+            - Usuario usuarioLogeado
+            - GeneradorDeNiveles motor
+            - Usuario usuarioActual
+            - int compuertaOculta
+            - Random randMisterio
+            - String respuestaTemporal
+            - int[] histCompuertasOcultasVisual
+            + VistaSimulador(Usuario usuarioLogeado)
+            - initComponents() void
+            - actualizarTablero() void
+            - btnVerificarActionPerformed(ActionEvent evt) void
+            - lblEstadoAMouseClicked(MouseEvent evt) void
+            - lblEstadoBMouseClicked(MouseEvent evt) void
+            - btnSiguienteActionPerformed(ActionEvent evt) void
+            - btnAnteriorActionPerformed(ActionEvent evt) void
+        }
+
+        class Principal {
+            + main(String[] args) void
+        }
+    }
+
+    %% Relaciones de Herencia
+    Compuertas <|-- AND
+    Compuertas <|-- OR
+    Compuertas <|-- XOR
+    Compuertas <|-- NOT
+
+    %% Relaciones de Dependencia y Asociación
+    Usuario ..> java.io.Serializable : Implementa
+    Memorycard ..> Usuario : Administra / Carga / Guarda
+    GeneradorDeNiveles o--> Compuertas : Contiene de tipo (compuertaActual, Aux1, Aux2)
+    VistaSimulador --> GeneradorDeNiveles : Usa motor (motor)
+    VistaSimulador --> Usuario : Mantiene estado (usuarioActual)
+    VistaSimulador ..> Memorycard : Llama de forma estática
+    Principal ..> VistaSimulador : Instancia e inicia
