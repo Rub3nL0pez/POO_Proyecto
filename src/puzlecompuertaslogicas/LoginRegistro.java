@@ -127,7 +127,6 @@ public class LoginRegistro extends javax.swing.JFrame {
         if (usuarioEncontrado.verificarPassword(passwordInput)) {
             javax.swing.JOptionPane.showMessageDialog(this, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "Acceso Concedido", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             
-            // --- ¡AQUÍ ESTÁ LA MAGIA LOGRADA! ---
             // 1. Instanciamos el simulador pasando el usuario validado
             VistaSimulador juego = new VistaSimulador(usuarioEncontrado);
             
