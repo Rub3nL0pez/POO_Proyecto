@@ -91,11 +91,6 @@ public class GeneradorDeNiveles {
         if (r == 1) return new OR("OR", "||");
         return new XOR("XOR", "!=");
     }
-
-    /**
-     * CORREGIDO Y BLINDADO: Filtra y descarta circuitos matemáticamente imposibles
-     * mediante simulación previa por fuerza bruta en milisegundos.
-     */
     public void generarCircuito() {
         int lvl = getNivelActual();
         
@@ -234,7 +229,6 @@ public class GeneradorDeNiveles {
             
             boolean resFinal = cFinal.operar(resParcial, this.entradaC);
             
-            // --- SOLUCIÓN: Eliminamos la inversión de resultadoSimulado. Ahora es directo. ---
             boolean resultadoSimulado = resFinal;
             
             return resultadoSimulado == this.respuestaEsperada;
